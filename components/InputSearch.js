@@ -19,16 +19,19 @@ export default class InputSearch extends Component {
 
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: '#777',
-    height: 40,
+    backgroundColor: 'rgba(0,0,0,0)',
+    height: 32,
     width: 300,
     marginTop: 20,
-    marginHorizontal: 40,
-    paddingHorizontal: 10,
-    borderRadius: 2
+    marginHorizontal: 32,
+    paddingHorizontal: 2,
+    borderBottomColor: 'white',
+    borderBottomWidth: 2,
+    marginBottom: 5,
   },
   textInput: {
     flex: 1,
-    color: 'white'
+    color: 'white',
+    fontSize: 16
   }
 })
