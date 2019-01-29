@@ -1,7 +1,9 @@
 import React from 'react';
-import { StyleSheet, Text, View, Platform, KeyboardAvoidingView, ImageBackground } from 'react-native';
+import { StyleSheet, Text, View, Platform, KeyboardAvoidingView, ImageBackground, StatusBar, ActivityIndicator } from 'react-native';
+import {fetchLocation, fetchWeather, } from './utils/weatherAPI'
 
 import weatherImages from './utils/weatherImages';
+
 
 import InputSearch from './components/InputSearch';
 
@@ -10,36 +12,85 @@ export default class App extends React.Component {
     super(props);
 
     this.state = {
-      location: 'Texas'
+      country: '',
+      location: '',
+      loading: false,
+      error: false,
+      temperature: 0,
+      weather: '',
+      humidity: 0
     }
 
     this.handleUpdateLocation = this.handleUpdateLocation.bind(this)
   }
 
-  handleUpdateLocation (city)  {
-    this.setState({location: city})
+  handleUpdateLocation = async (city) => {
+
+    if (!city) return
+
+    this.setState({loading: true}, async () => {
+      try {
+        const locationId = await fetchLocation(city)
+        const {location, weather, temperature, country, humidity} = await fetchWeather(locationId)
+        
+        this.setState({
+          loading: false,
+          error: false,
+          location,
+          weather,
+          temperature,
+          country,
+          humidity
+        })
+
+      } catch (e) {
+        this.setState({
+          loading: false,
+          error: true
+        })
+      }
+    })
   }
 
   render() {
 
-    const {location} = this.state
+    const {location, humidity, country, weather, loading, error, temperature} = this.state;
+    console.log(weather)
 
     return (
       <KeyboardAvoidingView style={styles.container} behavior="padding">
+        <StatusBar barStyle="light-content" />
         <ImageBackground
-          source={weatherImages('Snow')}
+          source={weatherImages(weather)}
           style={styles.imageContainer}
           imageStyle={styles.image}
         >
           <View style={styles.detailContainer}>
-            <Text style={[styles.largeText, styles.textStyle]}>{location}</Text>
-            <Text style={[styles.smallText, styles.textStyle]}>Light Snow</Text>
-            <Text style={[styles.largeText, styles.textStyle]}>18° F</Text>
- 
-            <InputSearch 
-              placeholder="Enter A City"
-              onSubmit={this.handleUpdateLocation}
-            />
+            <ActivityIndicator animating={loading} color="white" size="large" />
+
+            {!loading && (
+              <View>
+                {error && (
+                  <Text style={[styles.smallText, styles.textStyle]}>
+                    Could not load weather, please try a different city.
+                  </Text>
+                )}
+
+                {!error && (
+                  <View>
+                    <Text style={[styles.largeText, styles.textStyle]}>{location}</Text>
+                    <Text style={[styles.smallText, styles.textStyle]}>{weather}</Text>
+                    <Text style={[styles.smallText, styles.textStyle]}>Humidity: {humidity}</Text>
+                    <Text style={[styles.largeText, styles.textStyle]}>{`${Math.round(temperature*9/5) + 32}`}°F</Text>
+                  </View>
+                )}
+
+                <InputSearch
+                  placeholder="Please Enter A City"
+                  onSubmit={this.handleUpdateLocation}
+                />
+              </View>
+            )}
 
           </View>
         </ImageBackground>

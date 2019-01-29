@@ -1,5 +1,6 @@
 import React, { Component } from 'react'
 import { TextInput, StyleSheet, View } from 'react-native'
+import propTypes from 'prop-types'
 
 export default class InputSearch extends Component {
   constructor(props) {
@@ -62,6 +63,19 @@ const styles = StyleSheet.create({
   textInput: {
     flex: 1,
     color: 'white',
-    fontSize: 16
+    fontSize: 16,
+    marginHorizontal: 14,
+    textAlign: 'center',
+    width: 300
+    
   }
 })
+
+InputSearch.propTypes = {
+  onSubmit: propTypes.func.isRequired,
+  placeholder: propTypes.string
+}
+
+InputSearch.defaultProps = {
+  placeholder: ''
+}

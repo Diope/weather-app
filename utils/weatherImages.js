@@ -1,9 +1,9 @@
 const images = {
   Clear: require('../assets/clear.png'),
   Hail: require('../assets/hail.png'),
-  'Heavy Clouds': require('../assets/heavyClouds.png'),
+  'Heavy Cloud': require('../assets/heavyClouds.png'),
   'Heavy Rain': require('../assets/heavyRain.png'), //Get it...Heavy Rain lololol!!
-  'Light Clouds': require('../assets/lightClouds.png'),
+  'Light Cloud': require('../assets/lightClouds.png'),
   'Light Rain': require('../assets/lightRain.png'),
   Showers: require('../assets/showers.png'),
   Sleet: require('../assets/sleet.png'),
